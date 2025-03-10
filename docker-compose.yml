@@ -12,6 +12,7 @@ services:
       - "8080:8080"
       - "7077:7077"
       - "4040:4040"
+      - "6066:6066"
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
       interval: 5s
