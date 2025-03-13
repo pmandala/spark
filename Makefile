@@ -1,6 +1,6 @@
 clean:
-	docker rm -vf $(docker ps -aq) || true
-	docker rmi -f $(docker images -aq) || true
+	docker rm -vf $$(docker ps -aq) 2> /dev/null || true
+	docker rmi -f $$(docker images -aq) 2> /dev/null || true
 
 build:
 	docker-compose build
@@ -17,7 +17,9 @@ down:
 run-scaled:
 	docker-compose up --scale spark-worker=3
 
-run:
+up:
+	echo "Cleaning up logs..."
+	rm -rf logs/*
 	docker-compose up -d
 
 stop:
