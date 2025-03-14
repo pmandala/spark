@@ -3,13 +3,8 @@
 
 ## Prerequisites
 
-
-```
-* Dowmload JDK 17
-* Download [Spark 3.5.5] (https://archive.apache.org/dist/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz) 
-
-```
-
+- Download JDK 17
+- Download [Spark 3.5.5] (https://archive.apache.org/dist/spark/spark-3.5.5/spark-3.5.5-bin-hadoop3.tgz) 
 
 
 ### Build the spark images
