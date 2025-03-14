@@ -43,10 +43,13 @@ ls -l logs
 
 ```
 docker exec -it spark-master spark-submit --master spark://spark-master:7077 --deploy-mode client --class org.apache.spark.examples.SparkPi /opt/spark/examples/jars/spark-examples_2.12-3.5.5.jar
+```
 
+```
 docker exec -it spark-master spark-submit --master spark://spark-master:7077 --deploy-mode client --driver-memory 1g --executor-memory 1g --executor-cores 1 --class org.apache.spark.examples.SparkPi /opt/spark/examples/jars/spark-examples_2.12-3.5.5.jar
+```
 
-
+```
 curl -XPOST http://localhost:6066/v1/submissions/create \
 --header "Content-Type:application/json;charset=UTF-8" \
 --data '{
@@ -77,7 +80,9 @@ curl -XPOST http://localhost:6066/v1/submissions/create \
 
 ```
 curl -iv -X POST --data '{"file": "/jobs/spark_job.py"}' -H "Content-Type: application/json" http://localhost:8998/batches
+```
 
+```
 curl -XPOST http://localhost:6066/v1/submissions/create  \
 --header "Content-Type:application/json;charset=UTF-8" \
 --data '{
@@ -99,3 +104,5 @@ curl -XPOST http://localhost:6066/v1/submissions/create  \
 }'
 
 ```
+
+
