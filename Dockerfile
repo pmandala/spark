@@ -12,11 +12,6 @@ ENV SPARK_MASTER="spark://${SPARK_MASTER_HOST}:${SPARK_MASTER_PORT}"
 ENV SPARK_MASTER_WEBUI_PORT=8080
 ENV SPARK_WORKER_WEBUI_PORT=8081
 
-# LIVY
-ENV LIVY_PATH="0.8.0-incubating"
-ENV LIVY_VERSION="0.8.0-incubating_2.12"
-ENV LIVY_HOME="/opt/livy"
-
 # JDK 17 & Python 3.8
 COPY jdk-17.0.14_linux-x64_bin.rpm /tmp
 RUN yum update -y && \
@@ -42,16 +37,6 @@ ENV PATH="$SPARK_HOME/sbin:$SPARK_HOME/bin:${PATH}"
 RUN chmod u+x $SPARK_HOME/sbin/* && \
     chmod u+x $SPARK_HOME/bin/*
 
-# LIVY
-RUN curl https://downloads.apache.org/incubator/livy/${LIVY_PATH}/apache-livy-${LIVY_VERSION}-bin.zip -o /tmp/apache-livy-${LIVY_VERSION}-bin.zip && \
-        unzip /tmp/apache-livy-${LIVY_VERSION}-bin.zip -d /opt && \
-        mv /opt/apache-livy-${LIVY_VERSION}-bin ${LIVY_HOME} && \
-        mkdir -p ${LIVY_HOME}/logs && \
-        rm /tmp/apache-livy-${LIVY_VERSION}-bin.zip
-COPY livy.conf "$LIVY_HOME/conf"
-COPY livy-env.sh "$LIVY_HOME/conf"
-ENV PATH="${LIVY_HOME}/bin:${PATH}"
-
 # Install python deps
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
@@ -60,14 +45,13 @@ ENV PYSPARK_PYTHON python3
 ENV PYTHONPATH=$SPARK_HOME/python/:$PYTHONPATH
 
 #
-RUN mkdir -p /data/inputs /data/outputs /logs/servers /log/worker /tmp/spark-events /tmp/spark-history 
+RUN mkdir -p /data/inputs /data/outputs /logs/spark /log/worker /tmp/spark-events /tmp/spark-history 
 
 # entrypoint script
 COPY start_spark.sh .
 RUN chmod u+x ./start_spark.sh
 ENTRYPOINT ["./start_spark.sh"]
 CMD [ "bash" ]
-#ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 # 
 EXPOSE ${SPARK_MASTER_WEBUI_PORT} ${SPARK_MASTER_PORT}

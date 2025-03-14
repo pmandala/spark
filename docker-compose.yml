@@ -26,7 +26,7 @@ services:
     environment:
       - SPARK_WORKLOAD=master
       - SPARK_USER=spark
-      - SPARK_LOG_DIR=/logs/servers
+      - SPARK_LOG_DIR=/logs/spark
 
   spark-worker:
     image: spark-server:1.0 
@@ -42,7 +42,7 @@ services:
       - SPARK_WORKER_MEMORY=100G
       - SPARK_WORKER_CORES=10
       - SPARK_USER=spark
-      - SPARK_LOG_DIR=/logs/servers
+      - SPARK_LOG_DIR=/logs/spark
       - SPARK_WORKER_DIR=/logs/worker
     volumes:
       - ./data/inputs:/data/inputs
@@ -64,7 +64,7 @@ services:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_WORKLOAD=history
       - SPARK_USER=spark
-      - SPARK_LOG_DIR=/logs/servers
+      - SPARK_LOG_DIR=/logs/spark
     volumes:
       - ./data/inputs:/data/inputs
       - ./data/outputs:/data/outputs
