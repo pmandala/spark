@@ -18,8 +18,9 @@ run-scaled:
 	docker-compose up --scale spark-worker=3
 
 up:
-	echo "Cleaning up logs..."
-	rm -rf logs/*
+	#echo "Cleaning up logs..."
+	#rm -rf logs
+	mkdir -p data/inputs data/outputs jobs logs
 	docker-compose up -d
 
 stop:
@@ -27,6 +28,6 @@ stop:
 
 submit:
 	docker exec spark-master spark-submit --master spark://spark-master:7077 --deploy-mode client /jobs/$(app)
-        #docker exec -it spark-master spark-submit   --master spark://spark-master:7077   --deploy-mode client /jobs/word_non_null.py
+	#docker exec -it spark-master spark-submit   --master spark://spark-master:7077   --deploy-mode client /jobs/word_non_null.py
 
 

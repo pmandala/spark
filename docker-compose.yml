@@ -1,7 +1,7 @@
 version: "3.8"
 services:
   spark-master:
-    image: spark-master:1.0
+    image: spark-server:1.0
     build:
       context: .
     container_name: spark-master
@@ -26,11 +26,10 @@ services:
     environment:
       - SPARK_WORKLOAD=master
       - SPARK_USER=spark
-      - SPARK_LOG_DIR=/logs
+      - SPARK_LOG_DIR=/logs/servers
+
   spark-worker:
-    image: spark-worker:1.0 
-    build:
-      context: .
+    image: spark-server:1.0 
     container_name: spark-worker
     hostname: spark-worker
     networks:
@@ -40,17 +39,46 @@ services:
     environment:
       - SPARK_MASTER=spark://spark-master:7077
       - SPARK_WORKLOAD=worker
-      - SPARK_WORKER_MEMORY=1G
-      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=100G
+      - SPARK_WORKER_CORES=10
       - SPARK_USER=spark
+      - SPARK_LOG_DIR=/logs/servers
+      - SPARK_WORKER_DIR=/logs/worker
     volumes:
       - ./data/inputs:/data/inputs
       - ./data/outputs:/data/outputs
       - ./jobs:/jobs
-      - ./logs:/logs  
+      - ./logs:/logs 
+    depends_on:
+      - spark-master 
+
+  spark-history:
+    container_name: spark-history
+    hostname: spark-history
+    image: spark-server:1.0
+    networks:
+      - spark-network
+    ports:
+      - '18080:18080'
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKLOAD=history
+      - SPARK_USER=spark
+      - SPARK_LOG_DIR=/logs/servers
+    volumes:
+      - ./data/inputs:/data/inputs
+      - ./data/outputs:/data/outputs
+      - ./jobs:/jobs
+      - ./logs:/logs
+    depends_on:
+      - spark-master
+      - spark-worker
+
 networks:
   spark-network:
     driver: bridge
+
 #volumes:
 #  spark-inputs:
+
 
